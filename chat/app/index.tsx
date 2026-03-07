@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
 async function pingBackend(){
-  const res = await fetch("http://10.133.149.120:5000");
+  const res = await fetch("http://10.247.190.120:5000");
   const data = await res.json()
   console.log(data);
 }
