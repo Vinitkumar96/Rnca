@@ -4,7 +4,7 @@ import "dotenv/config"
 const app = express()
 
 app.get("/", (req,res)=>{
-    res.json({
+    return res.json({
         msg:"this is health"
     })
 })
