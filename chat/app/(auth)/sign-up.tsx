@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/colors";
+import { useAuth } from "@/context/auth-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React, { useState } from "react";
@@ -14,12 +15,33 @@ import {
 } from "react-native";
 
 const SignUp = () => {
-  const[name,setName] = useState("")
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [secureText, setSecureText] = useState(true);
+  const { signUp } = useAuth();
+
+  async function onSignUp() {
+    console.log("hello");
+    try {
+      if (!name || !email || !password) {
+        setError("Please fill in all fields");
+        return;
+      }
+      setError(null);
+      setLoading(true);
+      const err = await signUp(name, email, password);
+      if (err) {
+        setError(err);
+      }
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <KeyboardAvoidingView
@@ -97,7 +119,6 @@ const SignUp = () => {
           onChangeText={setName}
           placeholder="Your Name"
           placeholderTextColor={Colors.textMuted}
-         
           autoCapitalize="none"
           autoCorrect={false}
           style={{
@@ -195,6 +216,8 @@ const SignUp = () => {
         </View>
 
         <Pressable
+          onPress={onSignUp}
+          disabled={loading}
           style={({ pressed }) => ({
             backgroundColor: pressed ? Colors.primaryDark : Colors.primary,
             borderRadius: 12,

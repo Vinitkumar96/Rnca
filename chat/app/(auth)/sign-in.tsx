@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/colors";
+import { useAuth } from "@/context/auth-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React, { useState } from "react";
@@ -19,6 +20,25 @@ const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [secureText, setSecureText] = useState(true);
+
+  const{signIn} = useAuth()
+
+    const onSignIn = async () => {
+    try {
+      if (!email || !password) {
+        setError("Please fill in all fields");
+        return;
+      }
+      setError(null);
+      setLoading(true);
+      const err = await signIn(email, password);
+      if (err) setError(err);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -162,6 +182,8 @@ const SignIn = () => {
         </View>
 
         <Pressable
+          onPress={onSignIn}
+          disabled={loading}
           style={({ pressed }) => ({
             backgroundColor: pressed ? Colors.primaryDark : Colors.primary,
             borderRadius: 12,

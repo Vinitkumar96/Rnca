@@ -1,9 +1,20 @@
 import { Stack } from "expo-router";
 import SafeScreen from "@/components/SafeScreen";
 import { StatusBar } from "expo-status-bar";
+import { AuthProvider, useAuth } from "@/context/auth-context";
 
 export default function RootLayout() {
-  const isLoggedIn = false;
+  return (
+    <AuthProvider>
+      <Layout />
+    </AuthProvider>
+  );
+}
+
+function Layout() {
+  const { user, isLoading } = useAuth();
+
+  const isLoggedIn = !!user;
   return (
     <SafeScreen>
       <Stack
@@ -19,7 +30,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
         </Stack.Protected>
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style="light"/>
     </SafeScreen>
   );
 }
