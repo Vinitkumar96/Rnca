@@ -1,14 +1,250 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Colors } from "@/constants/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
-const SingUp = () => {
+const SignUp = () => {
+  const[name,setName] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [secureText, setSecureText] = useState(true);
+
   return (
-    <View>
-      <Text>SingUp</Text>
-    </View>
-  )
-}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          padding: 30,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={{ alignItems: "center", marginBottom: 48 }}>
+          <View
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 20,
+              backgroundColor: Colors.primary,
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <Ionicons name="chatbubbles" size={36} color="#fff" />
+          </View>
+          <Text
+            style={{
+              color: Colors.textPrimary,
+              fontSize: 28,
+              fontWeight: "700",
+            }}
+          >
+            Create Account
+          </Text>
+          <Text
+            style={{
+              color: Colors.textSecondary,
+              fontSize: 15,
+              marginTop: 6,
+            }}
+          >
+            Sign Up to start Chatting
+          </Text>
+        </View>
 
-export default SingUp
+        {error && (
+          <View
+            style={{
+              backgroundColor: Colors.errorMuted,
+              padding: 12,
+              borderRadius: 12,
+              marginBottom: 16,
+            }}
+          >
+            <Text style={{ color: Colors.error, fontSize: 14 }}>{error}</Text>
+          </View>
+        )}
 
-const styles = StyleSheet.create({})
+        <Text
+          style={{
+            color: Colors.textSecondary,
+            fontSize: 13,
+            fontWeight: "600",
+            marginBottom: 6,
+            marginLeft: 4,
+          }}
+        >
+          Name
+        </Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          placeholder="Your Name"
+          placeholderTextColor={Colors.textMuted}
+         
+          autoCapitalize="none"
+          autoCorrect={false}
+          style={{
+            backgroundColor: Colors.card,
+            borderWidth: 1,
+            borderColor: Colors.border,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 14,
+            color: Colors.textPrimary,
+            fontSize: 15,
+            marginBottom: 16,
+          }}
+        />
+
+        <Text
+          style={{
+            color: Colors.textSecondary,
+            fontSize: 13,
+            fontWeight: "600",
+            marginBottom: 6,
+            marginLeft: 4,
+          }}
+        >
+          Email
+        </Text>
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          placeholder="you@example.com"
+          placeholderTextColor={Colors.textMuted}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          style={{
+            backgroundColor: Colors.card,
+            borderWidth: 1,
+            borderColor: Colors.border,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 14,
+            color: Colors.textPrimary,
+            fontSize: 15,
+            marginBottom: 16,
+          }}
+        />
+
+        <Text
+          style={{
+            color: Colors.textSecondary,
+            fontSize: 13,
+            fontWeight: 600,
+            marginBottom: 6,
+            marginLeft: 4,
+          }}
+        >
+          Password
+        </Text>
+
+        <View style={{ position: "relative", marginBottom: 24 }}>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Enter your password"
+            placeholderTextColor={Colors.textMuted}
+            secureTextEntry={secureText}
+            style={{
+              backgroundColor: Colors.card,
+              borderWidth: 1,
+              borderColor: Colors.border,
+              borderRadius: 12,
+              paddingHorizontal: 16,
+              paddingVertical: 14,
+              paddingRight: 48,
+              color: Colors.textPrimary,
+              fontSize: 15,
+            }}
+          />
+          <Pressable
+            onPress={() => setSecureText(!secureText)}
+            style={{
+              position: "absolute",
+              right: 12,
+              top: 0,
+              bottom: 0,
+              justifyContent: "center",
+            }}
+          >
+            <Ionicons
+              name={secureText ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={Colors.textMuted}
+            />
+          </Pressable>
+        </View>
+
+        <Pressable
+          style={({ pressed }) => ({
+            backgroundColor: pressed ? Colors.primaryDark : Colors.primary,
+            borderRadius: 12,
+            paddingVertical: 15,
+            alignItems: "center",
+            opacity: loading ? 0.7 : 1,
+          })}
+        >
+          {loading ? (
+            <ActivityIndicator color={"#fff"} />
+          ) : (
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: "700",
+              }}
+            >
+              Sign In
+            </Text>
+          )}
+        </Pressable>
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 24,
+          }}
+        >
+          <Text style={{ color: Colors.textPrimary, fontSize: 14 }}>
+            Already have an account?{" "}
+          </Text>
+          <Link href="/(auth)/sign-in" asChild>
+            <Pressable>
+              <Text
+                style={{
+                  color: Colors.primaryLight,
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+              >
+                Sign In
+              </Text>
+            </Pressable>
+          </Link>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+};
+
+export default SignUp;

@@ -3,7 +3,7 @@ import SafeScreen from "@/components/SafeScreen";
 import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
-  const isLoggedIn = true;
+  const isLoggedIn = false;
   return (
     <SafeScreen>
       <Stack
