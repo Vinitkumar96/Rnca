@@ -4,6 +4,8 @@ import { expo } from "@better-auth/expo";
 
 import { prisma } from "./db.js";
 
+//this is yourrr betterauth instance vinit bhaii
+
 export const auth = betterAuth({
   plugins: [expo()],
   database: prismaAdapter(prisma, {
