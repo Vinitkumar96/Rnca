@@ -5,7 +5,77 @@ function normalizePair(a,b){
 }
 
 export async function sendFriendRequest(senderId,receiverId) {
-    
+    //1 first we will check for receiverid and see if we are not sending request to yourself
+   if(!receiverId) throw new Error("receiver id is required")
+
+    if(senderId === receiverId){
+        throw new Error("You cannot send friend request to yourself")
+    }
+
+    //2 now we will normalize and then check for existing friend request ... in the friends table
+    const[u1,u2] = normalizePair(senderId,receiverId)
+
+    const existingFriends = await prisma.friend.findFirst({
+        where:{
+            userId1:u1,
+            userId2:u2
+        },
+        select:{
+            id:true
+        }
+    })
+
+    if(existingFriends) throw new Error("You are already friends")
+
+    //3 now we will check if there is already a request between the two of you .... in the friendRequest table
+    const existing = await prisma.friendRequest.findFirst({
+        where:{
+            OR:[
+                {senderId,receiverId},
+                {senderId:receiverId, receiverId:senderId}
+            ],
+        }
+    })
+
+    if(existing){
+        if(existing.status === "PENDING"){
+            throw new Error("Friend request already sent")
+        }
+
+        if(existing.status === "REJECTED" || existing.status === "CANCELLED"){
+            await prisma.friendRequest.update({
+                where:{
+                    id: existing.id
+                },
+                data:{
+                    status: "PENDING"
+                }
+            })
+
+            return{
+                success:true,
+                message:"Friend request sent successfully"
+            }
+        }
+
+        if(existing.status === "ACCEPTED"){
+            throw new Error("You are already friends")
+        }
+    }
+
+    // if nothing above is true and we need to create a fresh request ...then we will create a new entry in the table
+    const c = await prisma.friendRequest.create({
+        data:{
+            senderId,
+            receiverId,
+            status:"PENDING"
+        }
+    })
+
+    return{
+        success:true,
+        message:"Friend request sent successfully"
+    }
 }
 
 
