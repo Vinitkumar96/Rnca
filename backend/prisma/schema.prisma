@@ -125,7 +125,8 @@ model Friend {
   @@index([userId1])
   @@index([userId2])
 }
-
+// user1 → shortcut to fetch full User data for userId1
+// user2 → shortcut to fetch full User data for userId2
 
 enum FriendRequestStatus {
   PENDING

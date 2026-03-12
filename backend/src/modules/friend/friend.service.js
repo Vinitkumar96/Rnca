@@ -78,9 +78,27 @@ export async function sendFriendRequest(senderId,receiverId) {
     }
 }
 
-
+// "Give me all friends of this user with their details"
 export async function getFriendsDeatil(userId) {
-    
+    const links = await prisma.friend.findMany({
+        where:{
+            OR:[
+                {userId1:userId},
+                {userId2:userId}
+            ]
+        },
+        include:{
+            user1: {select:{id:true, name:true, email:true, image:true}},
+            user2: {select:{id:true, name:true, email:true, image:true}}
+        },
+        orderBy:{
+            createdAt:"desc"
+        }
+    })
+
+    //for each friendship row we return the other person not mee...
+    return links.map((l) => (l.userId1 === userId ? l.user2 : l.user1))
+
 }
 
 
