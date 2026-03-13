@@ -43,7 +43,7 @@ export async function sendFriendRequest(senderId,receiverId) {
         }
 
         if(existing.status === "REJECTED" || existing.status === "CANCELLED"){
-            await prisma.friendRequest.update({
+           const updated =  await prisma.friendRequest.update({
                 where:{
                     id: existing.id
                 },
@@ -51,10 +51,10 @@ export async function sendFriendRequest(senderId,receiverId) {
                     status: "PENDING"
                 }
             })
-
             return{
                 success:true,
-                message:"Friend request sent successfully"
+                message:"Friend request sent successfully",
+                id:updated.id
             }
         }
 
@@ -71,10 +71,10 @@ export async function sendFriendRequest(senderId,receiverId) {
             status:"PENDING"
         }
     })
-
     return{
         success:true,
-        message:"Friend request sent successfully"
+        message:"Friend request sent successfully",
+        id:c.id
     }
 }
 
