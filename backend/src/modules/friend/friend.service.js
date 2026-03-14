@@ -252,3 +252,34 @@ export default async function acceptFriendRequest(requestId, receiverId){
             message:"Friend request accepted successfully"
         }
 }
+
+
+export default async function rejectFriendRequest(requestId,receiverId) {
+    const friendRequest = await prisma.friendRequest.findFirst({
+        where:{
+            id:requestId,
+            receiverId,
+            status:"PENDING"
+        }
+    })
+
+    if(!friendRequest){
+        throw new Error("Friend request not found")
+    }
+
+    await prisma.friendRequest.update({
+        where:{
+            id:requestId,
+            receiverId,
+            status:"PENDING"
+        },
+        data:{
+            status:"REJECTED"
+        }
+    })
+
+    return{
+        success:true,
+        message:"Friend request rejected successfully"
+    } 
+} 

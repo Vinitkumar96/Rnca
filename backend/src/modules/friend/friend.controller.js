@@ -1,5 +1,4 @@
-import { request } from "express"
-import { discoverUsers, getFriendsDeatil, sendFriendRequest } from "./friend.service.js"
+import acceptFriendRequest, { discoverUsers, getFriendsDeatil, sendFriendRequest,rejectFriendRequest } from "./friend.service.js"
 
 export async function sendRequest(req,res){
     try{
@@ -52,9 +51,13 @@ export async function acceptRequest(req,res){
 
 export async function rejectRequest(req,res){
     try{
+        const userId =  req.user.id
+        const{requestId} = req.params
 
+        const result = rejectFriendRequest(requestId,userId)
+        return res.json(result)
     }catch(error){
-
+        return res.status(400).json({message:error.message || "Failed to reject request"})
     }
 }
 
