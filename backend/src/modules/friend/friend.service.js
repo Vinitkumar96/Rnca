@@ -283,3 +283,27 @@ export default async function rejectFriendRequest(requestId,receiverId) {
         message:"Friend request rejected successfully"
     } 
 } 
+
+export default async function cancelFriendRequest(requestId,senderId){
+    const friendRequest = await prisma.friendRequest.findFirst({
+        where:{
+            id:requestId,
+            senderId,
+            status:"PENDING"
+        }
+    })
+
+    if(!friendRequest){
+        throw new Error("Friend request was not found")
+    }
+
+    await prisma.friendRequest.update({
+        where:{
+            id:requestId,
+            senderId
+        },
+        data:{
+            status:"CANCELLED"
+        }
+    })
+}

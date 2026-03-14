@@ -63,8 +63,12 @@ export async function rejectRequest(req,res){
 
 export async function cancelRequest(req,res){
     try{
-
-    }catch(error){
+        const userId = req.user.id
+        const{requestId} = req.params
         
+        const result = cancelFriendRequest(requestId,userId)
+        return res.json(result)
+    }catch(error){
+        return res.status(400).json({message:error.message || "Failed to cancel request"})   
     }
 }
