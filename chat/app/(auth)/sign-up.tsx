@@ -249,7 +249,7 @@ const SignUp = () => {
           }}
         >
           <Text style={{ color: Colors.textPrimary, fontSize: 14 }}>
-            Already have an account?{" "}
+            Already have an account? {"    "}
           </Text>
           <Link href="/(auth)/sign-in" asChild>
             <Pressable>

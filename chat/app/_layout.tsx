@@ -9,7 +9,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-      <Layout />
+        <Layout />
       </QueryClientProvider>
     </AuthProvider>
   );
@@ -34,7 +34,7 @@ function Layout() {
           <Stack.Screen name="(tabs)" />
         </Stack.Protected>
       </Stack>
-      <StatusBar style="light"/>
+      <StatusBar style="dark"/>
     </SafeScreen>
   );
 }

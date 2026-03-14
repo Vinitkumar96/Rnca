@@ -13,7 +13,7 @@ export const friendService = {
 
     getFriends: async () => {
         const headers = await getHeaders()
-        const res = await fetch(`${API_URL}/friend/list`,{
+        const res = await fetch(`${API_URL}/api/friend/list`,{
             method:"GET",
             headers
         })
@@ -27,7 +27,7 @@ export const friendService = {
 
     discoverUsers: async(search:string = "") => {
         const headers = await getHeaders()
-        const url = `${API_URL}/friend/discover?search=${encodeURIComponent(search)}`
+        const url = `${API_URL}/api/friend/discover?search=${encodeURIComponent(search)}`
         try{
             const res = await fetch(url,{
                 method:"GET",
@@ -47,7 +47,7 @@ export const friendService = {
 
     sendFriendRequest: async(recieverId: string) => {
         const headers = await getHeaders()
-        const res = await fetch(`${API_URL}/friend/request`,{
+        const res = await fetch(`${API_URL}/api/friend/request`,{
             method:"POST",
             headers,
             body:JSON.stringify({recieverId})

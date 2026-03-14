@@ -13,7 +13,7 @@ export function useDiscoverUsers(search:string){
         queryKey: USER_KEYS.discover(search),
         queryFn: () => friendService.discoverUsers(search)
     })
-}
+} 
 
 // for friends list
 export function useFriends(){

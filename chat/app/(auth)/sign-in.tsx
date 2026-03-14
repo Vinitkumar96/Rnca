@@ -215,7 +215,7 @@ const SignIn = () => {
           }}
         >
           <Text style={{ color: Colors.textPrimary, fontSize: 14 }}>
-            Don't have an account?{" "}
+            Don't have an account? {"   "}
           </Text>
           <Link href="/(auth)/sign-up" asChild>
             <Pressable>

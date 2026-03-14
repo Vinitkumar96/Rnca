@@ -2,17 +2,13 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Link } from 'expo-router';
 import { authClient } from '@/lib/auth-client';
-
-async function pingBackend(){
-  const res = await fetch("http://10.133.124.120:5000");
-  const data = await res.json()
-  console.log(data);
-}
+import { useAuth } from '@/context/auth-context';
 
 
 
 const HomeScreen = () => {
 const {data} = authClient.useSession()
+const {signOut}  = useAuth()
 
   return (
     <View>
@@ -22,6 +18,12 @@ const {data} = authClient.useSession()
         JSON.stringify(data?.user, null,2)
       }
       </Text>
+
+      <Pressable onPress={signOut}>
+        <Text>
+          Sign Out
+        </Text>
+      </Pressable>
 
     </View>
   )
