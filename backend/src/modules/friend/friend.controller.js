@@ -1,3 +1,4 @@
+import { request } from "express"
 import { discoverUsers, getFriendsDeatil, sendFriendRequest } from "./friend.service.js"
 
 export async function sendRequest(req,res){
@@ -34,5 +35,33 @@ export async function discover(req,res){
         return res.json(data)
     }catch(error){
         res.status(500).json({message:error.message || "Failed to discover users"})
+    }
+}
+
+export async function acceptRequest(req,res){
+    try{
+        const userId = req.user.id
+        const {requestId} = req.params;
+
+        const result = await acceptFriendRequest(requestId,userId)
+        return res.json(result)
+    }catch(error){
+        return res.status(400).json({message:error.message || "Failed to accept request"})
+    }
+}
+
+export async function rejectRequest(req,res){
+    try{
+
+    }catch(error){
+
+    }
+}
+
+export async function cancelRequest(req,res){
+    try{
+
+    }catch(error){
+        
     }
 }

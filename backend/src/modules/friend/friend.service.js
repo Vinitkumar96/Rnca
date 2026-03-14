@@ -206,3 +206,49 @@ export async function discoverUsers(userId,search="") {
     return {...u , relationship , friendRequestId}
   });
 }
+
+export default async function acceptFriendRequest(requestId, receiverId){
+    const friendRequest = await prisma.friendRequest.findFirst({
+        where:{
+            id:requestId,
+            receiverId,
+            status:"PENDING"
+        }
+    })
+
+    if(!friendRequest){
+        throw new Error("Friend request not found")
+    }
+
+    const {senderId} = friendRequest
+
+    const[u1,u2] = normalizePair(receiverId,senderId)
+
+    await prisma.$transaction([
+
+        prisma.friendRequest.update({
+            where:{
+                id:requestId,
+            },
+            data:{
+                status:"ACCEPTED"
+            }
+        }),
+
+        prisma.friend.upsert({
+            where:{
+                userId1_userId2:{userId1:u1, userId2:u2}
+            },
+            create:{
+                userId1:u1,
+                userId2:u2
+            },
+            update:{}
+        })
+    ])
+
+         return {
+            success:true,
+            message:"Friend request accepted successfully"
+        }
+}

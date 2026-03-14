@@ -12,3 +12,7 @@ friendRouter.post("/request",sendRequest)
 friendRouter.get("/list", listFriends)
 // discover other
 friendRouter.get("/discover", discover)
+
+friendRouter.post("/request/id/:requestId/accept",acceptRequest)
+friendRouter.post("/request/id/:requestId/reject",rejectRequest)
+friendRouter.post("/request/id/:requestId/cancel",cancelRequest)
