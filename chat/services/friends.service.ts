@@ -45,12 +45,12 @@ export const friendService = {
         }
     },
 
-    sendFriendRequest: async(recieverId: string) => {
+    sendFriendRequest: async(receiverId: string) => {
         const headers = await getHeaders()
         const res = await fetch(`${API_URL}/api/friend/request`,{
             method:"POST",
             headers,
-            body:JSON.stringify({recieverId})
+            body:JSON.stringify({receiverId})
         })
         const data = await res.json()
         if(!res.ok) throw new Error(data.message || "Failed to send request")
@@ -83,7 +83,7 @@ export const friendService = {
 
     cancelFriendRequest: async(requestId:string) => {
         const headers = await getHeaders()
-        const res = await fetch(`${API_URL}/friend/request/id/${requestId}/cancel`,{
+        const res = await fetch(`${API_URL}/api/friend/request/id/${requestId}/cancel`,{
             method:"POST",
             headers
         })

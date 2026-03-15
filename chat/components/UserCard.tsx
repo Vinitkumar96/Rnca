@@ -59,9 +59,7 @@ const UserCard = ({ user}:{user:User}) => {
             disabled={sendRequestMutation.isPending}
           >
             <Text style={styles.buttonText}>
-              {
-                sendRequestMutation.isPending ? "🔃" : "Add Friend"
-              }
+                Add Friend
             </Text>
           </TouchableOpacity>
         );

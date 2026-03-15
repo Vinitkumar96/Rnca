@@ -36,12 +36,13 @@ export function useSendFriendRequest(){
         //updating ui instantly,,,no waittt
             queryClient.setQueriesData({queryKey:["users","discover"]}, (old:any[]) => {
                 if(!old)return[]
-                return old.map((user) => user.id === receiverId ? {...user,relationship:"REQUEST_SENT"} : user)
+                return old.map((user) => user.id === receiverId ? {...user,relationship:"PENDING"} : user)
             })
             //return snapshot for rollback
             return {previousDiscover}
        },
        onError: (err,_,context) => {
+        console.log("ERROR",err);
         context?.previousDiscover?.forEach(([queryKey,data]) => {
             queryClient.setQueryData(queryKey,data)
         })
@@ -52,7 +53,7 @@ export function useSendFriendRequest(){
         // adding friendRequestid and relationship after the server response from mutateFn
         queryClient.setQueriesData({queryKey: ["users","discover"]}, (old:any[]) => {
             if(!old) return []
-            return old.map((user) => user.id === receiverId ? {...user, relationship:"REQUEST_SENT",friendRequestId:data.id} : user)
+            return old.map((user) => user.id === receiverId ? {...user, relationship:"PENDING",friendRequestId:data.id} : user)
         })
         // refetch discover to get the confirmed value...it also removes the previous querykey cache value
         queryClient.invalidateQueries({queryKey: ["users","discover"]})
