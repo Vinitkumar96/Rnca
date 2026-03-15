@@ -59,3 +59,78 @@ export function useSendFriendRequest(){
        }
     })
 }
+
+
+export function useAcceptFriendRequest(){
+    const queryClient =  useQueryClient()
+    return useMutation({
+        mutationFn: (requestId:string) => friendService.acceptFriendRequest(requestId),
+        onMutate: async(requestId) => {
+            await queryClient.cancelQueries({queryKey:USER_KEYS.all})
+            const previousUsers = queryClient.getQueriesData({queryKey:["users","discover"]})
+            queryClient.setQueriesData({queryKey:["users","discover"]}, (old:any[]) => {
+                if(!old) return[]
+                return old.map((user) => user.friendRequestId === requestId ? {...user,relationship:"FRIEND"} : user)
+            })
+            return {previousUsers}
+        },
+        onError: (err,_,context) => {
+            context?.previousUsers?.forEach(([queryKey,data]) => {
+                queryClient.setQueryData(queryKey,data)
+            })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey:["users","discover"]})
+        }
+    })
+}
+
+export function useRejectFriendRequest(){
+    const queryClient = useQueryClient()
+
+    return useMutation({
+       mutationFn : (requestId:string) => friendService.rejectFriendRequest(requestId),
+       onMutate : async(requestId:string) => {
+        queryClient.cancelQueries({queryKey:USER_KEYS.all})
+        const previousDiscovers = queryClient.getQueriesData({queryKey:["users","discover"]})
+        queryClient.setQueriesData({queryKey:["users","discover"]}, (old:any[]) => {
+            if(!old) return []
+            return old.map((user) => user.friendRequestId == requestId ? {...user,relationship:"REJECTED"}: user)
+        })
+        return {previousDiscovers}
+       },
+       onError:(err,_,context) => {
+        context?.previousDiscovers?.forEach(([queryKey,data]) => {
+            queryClient.setQueryData(queryKey,data)
+        })
+       },
+       onSuccess:() => {
+         queryClient.invalidateQueries({queryKey:["users","discover"]})
+       }
+    })
+}
+
+export function useCancelFriendRequest(){
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn:(requestId:string) => friendService.cancelFriendRequest(requestId),
+        onMutate: async (requestId:string) => {
+            await queryClient.cancelQueries({queryKey:USER_KEYS.all})
+            const previousDiscovers = queryClient.getQueriesData({queryKey:["users","discover"]})
+            queryClient.setQueriesData({queryKey:["users","discover"]}, (old:any[]) => {
+                if(!old)return []
+                return old.map((user) => user.friendRequestId === requestId ? {...user,relationship:"CANCELLED"} : user)
+            })
+            return {previousDiscovers}
+        },
+        onError:(err,_,context) => {
+            context?.previousDiscovers?.forEach(([queryKey,data]) => {
+                queryClient.setQueryData(queryKey,data)
+            })
+        },
+        onSuccess:() => {
+            queryClient.invalidateQueries({queryKey:["users","discover"]})
+        }
+    })
+}
