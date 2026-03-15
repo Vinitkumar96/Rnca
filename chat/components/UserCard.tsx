@@ -1,6 +1,7 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useAcceptFriendRequest, useCancelFriendRequest, useRejectFriendRequest, useSendFriendRequest } from "@/hooks/useFriendQueries";
 
 interface User {
   id: string;
@@ -11,11 +12,13 @@ interface User {
   friendRequestId?: string;
 }
 
-interface UserCardProps {
-  user: User;
-}
+const UserCard = ({ user}:{user:User}) => {
 
-const UserCard: React.FC<UserCardProps> = ({ user }) => {
+    const sendRequestMutation = useSendFriendRequest()
+    const acceptFriendRequestMutation = useAcceptFriendRequest()
+    const rejectFriendRequestMutation = useRejectFriendRequest()
+    const cancelFriendRequestMutation = useCancelFriendRequest()
+
   const renderActionButton = () => {
     switch (user.relationship) {
       case "FRIEND":
@@ -27,17 +30,23 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         );
       case "REQUEST_SENT":
         return (
-          <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+          <TouchableOpacity style={[styles.button, styles.cancelButton]}
+            onPress={() => cancelFriendRequestMutation.mutate(user.friendRequestId!)}
+          >
             <Text style={styles.buttonText}>Cancel Request</Text>
           </TouchableOpacity>
         );
       case "REQUEST_RECEIVED":
         return (
           <View style={styles.actionRow}>
-            <TouchableOpacity style={[styles.button, styles.acceptButton]}>
+            <TouchableOpacity style={[styles.button, styles.acceptButton]}
+              onPress={() => acceptFriendRequestMutation.mutate(user.friendRequestId!)}
+            >
               <Text style={styles.buttonText}>Accept</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+            <TouchableOpacity style={[styles.button, styles.cancelButton]}
+              onPress={() => rejectFriendRequestMutation.mutate(user.friendRequestId!)}
+            >
               <Text style={styles.buttonText}>Reject</Text>
             </TouchableOpacity>
           </View>
@@ -45,8 +54,15 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
       default:
         return (
-          <TouchableOpacity style={[styles.button, styles.sendButton]}>
-            <Text style={styles.buttonText}>Add Friend</Text>
+          <TouchableOpacity style={[styles.button, styles.sendButton]}
+            onPress={() => sendRequestMutation.mutate(user.id)}
+            disabled={sendRequestMutation.isPending}
+          >
+            <Text style={styles.buttonText}>
+              {
+                sendRequestMutation.isPending ? "🔃" : "Add Friend"
+              }
+            </Text>
           </TouchableOpacity>
         );
     }

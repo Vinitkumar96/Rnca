@@ -1,11 +1,12 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
-import{useDiscoverUsers} from "@/hooks/useFriendQueries"
+import{ useDiscoverUsers} from "@/hooks/useFriendQueries"
 import UserCard from '@/components/UserCard'
 
 const Discover = () => {
   const[search,setSearch] = useState("")
   const {data=[],isLoading} = useDiscoverUsers(search)
+
 
   
   return (
@@ -26,7 +27,9 @@ const Discover = () => {
             data={data}
             keyExtractor={(data) => data.id}
             renderItem={({item}) => (
-              <UserCard user={item} />
+              <UserCard 
+                user={item}
+              />
             )}
             ListEmptyComponent={
               <Text style={styles.emptyText}>No Users Found</Text>
