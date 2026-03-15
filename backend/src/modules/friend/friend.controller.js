@@ -1,4 +1,4 @@
-import acceptFriendRequest, { discoverUsers, getFriendsDeatil, sendFriendRequest,rejectFriendRequest } from "./friend.service.js"
+import  { discoverUsers, getFriendsDeatil, sendFriendRequest,acceptFriendRequest,rejectFriendRequest,cancelFriendRequest } from "./friend.service.js"
 
 export async function sendRequest(req,res){
     try{

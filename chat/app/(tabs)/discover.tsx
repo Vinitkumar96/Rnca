@@ -6,6 +6,8 @@ import UserCard from '@/components/UserCard'
 const Discover = () => {
   const[search,setSearch] = useState("")
   const {data=[],isLoading} = useDiscoverUsers(search)
+
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Discover People</Text>

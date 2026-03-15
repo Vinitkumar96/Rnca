@@ -207,7 +207,7 @@ export async function discoverUsers(userId,search="") {
   });
 }
 
-export default async function acceptFriendRequest(requestId, receiverId){
+export  async function acceptFriendRequest(requestId, receiverId){
     const friendRequest = await prisma.friendRequest.findFirst({
         where:{
             id:requestId,
@@ -254,7 +254,7 @@ export default async function acceptFriendRequest(requestId, receiverId){
 }
 
 
-export default async function rejectFriendRequest(requestId,receiverId) {
+export  async function rejectFriendRequest(requestId,receiverId) {
     const friendRequest = await prisma.friendRequest.findFirst({
         where:{
             id:requestId,
@@ -284,7 +284,7 @@ export default async function rejectFriendRequest(requestId,receiverId) {
     } 
 } 
 
-export default async function cancelFriendRequest(requestId,senderId){
+export  async function cancelFriendRequest(requestId,senderId){
     const friendRequest = await prisma.friendRequest.findFirst({
         where:{
             id:requestId,
