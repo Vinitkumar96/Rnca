@@ -12,10 +12,12 @@ export async function send(req, res) {
     return res.json(result);
   } catch (error) {
     return res.status(400).json({
-      message: "Failed to send message",
+      message: error.message || "Failed to send message",
     });
   }
 }
+
+// /api/chat/messages/vinit-id?limit=50&cursor=2024-01-01T10:00:00Z
 
 export async function listMessages(req, res) {
   try {
@@ -33,7 +35,7 @@ export async function listMessages(req, res) {
     return res.json(result);
   } catch (error) {
     return res.status(400).json({
-      message: "Failed to list messages",
+      message: error.message || "Failed to list messages",
     });
   }
 }
