@@ -64,7 +64,7 @@ export const chatService = {
 
         return data
     },
-    getConversation: async() => {
+    getConversations: async() => {
         const headers = await getHeaders()
         const res = await fetch(`${API_URL}/api/chat/conversations`, {
             method:"GET",
