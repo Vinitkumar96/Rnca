@@ -12,7 +12,8 @@ export function useConversation(){
     return useQuery({
         queryKey:CHAT_KEYS.conversations(),
         queryFn: () => chatService.getConversations(),
-        staleTime:1000*30
+        staleTime:1000*30,
+        refetchOnWindowFocus: true
     })
 }
 
